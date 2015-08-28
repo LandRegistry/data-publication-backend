@@ -1,0 +1,4 @@
+Flask==0.10.1
+Werkzeug==0.9.6
+boto3==1.1.2
+mypy-lang==0.2.0
