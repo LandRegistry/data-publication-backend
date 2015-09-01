@@ -19,8 +19,8 @@ def get_available_files(prefix):
         new_list.append(list_item.copy())
 
     # ensure list is ordered by date in filename
-    if new_list:
-        new_list.sort(key=itemgetter('Key'))
+    if len(new_list) > 0:
+        new_list.sort(key=itemgetter('Name'))
 
     available_file_details = {
         "File_List": new_list,
