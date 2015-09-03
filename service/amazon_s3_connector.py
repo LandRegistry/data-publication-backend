@@ -20,7 +20,5 @@ def get_file_list(prefix):
 
 
 def get_download_url(key):
-    parameters = {AWS_BUCKET_NAME, key, key}
-    return s3.generate_presigned_url('download_file',
-                                     Params=parameters,
-                                     ExpiresIn=AWS_LINK_DURATION)
+    parameters = {'Bucket': AWS_BUCKET_NAME, 'Key': key}
+    return s3.generate_presigned_url('get_object', Params=parameters, ExpiresIn=AWS_LINK_DURATION)

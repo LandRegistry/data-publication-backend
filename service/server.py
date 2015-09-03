@@ -9,14 +9,16 @@ def get_available_files(prefix):
     file_list = amazon_s3_connector.get_file_list(prefix)
 
     new_list = []
-    for file in file_list['Contents']:
-        list_item = {
-            "Name": file['Key'],
-            "Size": file['Size'],
-            "Checksum": file['ETag'],
-            "URL": amazon_s3_connector.get_download_url(file['Key'])
-        }
-        new_list.append(list_item.copy())
+    if 'Contents' in file_list:
+        for file in file_list['Contents']:
+            if file['Size'] > 0:
+                list_item = {
+                    "Name": file['Key'].replace(prefix, ''),
+                    "Size": file['Size'],
+                    "Checksum": file['ETag'],
+                    "URL": amazon_s3_connector.get_download_url(file['Key'])
+                }
+                new_list.append(list_item.copy())
 
     # ensure list is ordered by date in filename
     if len(new_list) > 0:
