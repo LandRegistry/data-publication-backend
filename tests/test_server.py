@@ -9,7 +9,6 @@ no_files = {
     'IsTruncated': False,
     'Marker': 'Marker1',
     'NextMarker': 'Marker2',
-    'Contents': [],
     'Name': 'Name',
     'Prefix': 'OV',
     'Delimiter': '',
@@ -55,7 +54,17 @@ multiple_files = {
     'NextMarker': 'Marker2',
     'Contents': [
         {
-            'Key': 'OV_FULL_2015_08.zip',
+            'Key': 'overseas-ownership/',
+            'LastModified': datetime.date(2015, 1, 1),
+            'ETag': 'ETag1234567890',
+            'Size': 0,
+            'StorageClass': 'STANDARD',
+            'Owner': {
+                'DisplayName': 'DisplayName',
+                'ID': 'id_string'
+            }
+        },{
+            'Key': 'overseas-ownership/OV_FULL_2015_08.zip',
             'LastModified': datetime.date(2015, 1, 1),
             'ETag': 'ETag1234567890',
             'Size': 12345,
@@ -66,7 +75,7 @@ multiple_files = {
             }
         },
         {
-            'Key': 'OV_UPDATE_2015_08.zip',
+            'Key': 'overseas-ownership/OV_UPDATE_2015_08.zip',
             'LastModified': datetime.date(2015, 1, 1),
             'ETag': 'ETag1234567891',
             'Size': 12345,
@@ -98,7 +107,7 @@ class TestRetrieveFileDetails:
 
     @mock.patch('service.amazon_s3_connector.get_file_list', return_value=no_files)
     def test_get_available_files_none_found(self, mock_list):
-        response = self.app.get('/list-files/OV')
+        response = self.app.get('/list-files/overseas-ownership')
         content = response.data.decode()
         file_details = json.loads(content)
         assert response.status_code == 200
@@ -107,7 +116,7 @@ class TestRetrieveFileDetails:
     @mock.patch('service.amazon_s3_connector.get_file_list', return_value=one_file)
     @mock.patch('service.amazon_s3_connector.get_download_url', return_value=presigned_url)
     def test_get_available_files_one_found(self, mock_list, mock_url):
-        response = self.app.get('/list-files/OV')
+        response = self.app.get('/list-files/overseas-ownership')
         content = response.data.decode()
         content = response.data.decode()
         file_details = json.loads(content)
@@ -119,7 +128,7 @@ class TestRetrieveFileDetails:
     @mock.patch('service.amazon_s3_connector.get_file_list', return_value=multiple_files)
     @mock.patch('service.amazon_s3_connector.get_download_url', return_value=presigned_url)
     def test_get_available_files_multiple_found(self, mock_list, mock_url):
-        response = self.app.get('/list-files/OV')
+        response = self.app.get('/list-files/overseas-ownership')
         content = response.data.decode()
         content = response.data.decode()
         file_details = json.loads(content)
