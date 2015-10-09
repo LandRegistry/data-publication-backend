@@ -26,7 +26,7 @@ one_file = {
     'NextMarker': 'Marker2',
     'Contents': [
         {
-            'Key': 'OV_FULL_2015_08.zip',
+            'Key': app.config['AWS_FOLDER_PREFIX'] + 'overseas-ownership/OV_FULL_2015_08.zip',
             'LastModified': datetime.date(2015, 1, 1),
             'ETag': 'ETag1234567890',
             'Size': 12345,
@@ -54,7 +54,7 @@ multiple_files = {
     'NextMarker': 'Marker2',
     'Contents': [
         {
-            'Key': 'overseas-ownership/',
+            'Key': app.config['AWS_FOLDER_PREFIX'] + 'overseas-ownership/',
             'LastModified': datetime.date(2015, 1, 1),
             'ETag': 'ETag1234567890',
             'Size': 0,
@@ -64,7 +64,7 @@ multiple_files = {
                 'ID': 'id_string'
             }
         },{
-            'Key': 'overseas-ownership/OV_FULL_2015_08.zip',
+            'Key': app.config['AWS_FOLDER_PREFIX'] + 'overseas-ownership/OV_FULL_2015_08.zip',
             'LastModified': datetime.date(2015, 1, 1),
             'ETag': 'ETag1234567890',
             'Size': 12345,
@@ -75,7 +75,7 @@ multiple_files = {
             }
         },
         {
-            'Key': 'overseas-ownership/OV_UPDATE_2015_08.zip',
+            'Key': app.config['AWS_FOLDER_PREFIX'] + 'overseas-ownership/OV_UPDATE_2015_08.zip',
             'LastModified': datetime.date(2015, 1, 1),
             'ETag': 'ETag1234567891',
             'Size': 12345,
@@ -118,7 +118,6 @@ class TestRetrieveFileDetails:
     def test_get_available_files_one_found(self, mock_list, mock_url):
         response = self.app.get('/list-files/overseas-ownership')
         content = response.data.decode()
-        content = response.data.decode()
         file_details = json.loads(content)
         assert response.status_code == 200
         assert len(file_details['File_List']) == 1
@@ -129,7 +128,6 @@ class TestRetrieveFileDetails:
     @mock.patch('service.amazon_s3_connector.get_download_url', return_value=presigned_url)
     def test_get_available_files_multiple_found(self, mock_list, mock_url):
         response = self.app.get('/list-files/overseas-ownership')
-        content = response.data.decode()
         content = response.data.decode()
         file_details = json.loads(content)
         assert response.status_code == 200
