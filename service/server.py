@@ -5,9 +5,9 @@ from operator import itemgetter
 from service import app, amazon_s3_connector
 
 
-@app.route('/list-files/<prefix>', methods=['GET'])
-def get_available_files(prefix):
-    prefix += '/'
+@app.route('/list-files/<dataset>', methods=['GET'])
+def get_available_files(dataset):
+    prefix = '{}{}/'.format(app.config['AWS_FOLDER_PREFIX'], dataset)
     file_list = amazon_s3_connector.get_file_list(prefix)
 
     new_list = []
@@ -41,4 +41,4 @@ def health_check():
 
 @app.route('/', methods=['GET'])
 def menu():
-    return jsonify({"Endpoints": ['/health', '/list-files/<prefix>']})
+    return jsonify({"Endpoints": ['/health', '/list-files/<dataset>']})

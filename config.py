@@ -6,6 +6,7 @@ aws_secret_key = os.environ['AWS_SECRET_KEY']
 aws_region_name = os.environ['AWS_REGION_NAME']
 aws_bucket_name = os.environ['AWS_BUCKET_NAME']
 aws_link_duration = int(os.environ['AWS_LINK_DURATION'])
+aws_folder_prefix = os.environ['AWS_FOLDER_PREFIX']
 
 CONFIG_DICT = {
     'DEBUG': False,
@@ -15,6 +16,7 @@ CONFIG_DICT = {
     'AWS_REGION_NAME': aws_region_name,
     'AWS_BUCKET_NAME': aws_bucket_name,
     'AWS_LINK_DURATION': aws_link_duration,
+    'AWS_FOLDER_PREFIX': aws_folder_prefix
 }  # type: Dict[str, Union[bool, str, int]]
 
 settings = os.environ.get('SETTINGS')
