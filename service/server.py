@@ -1,14 +1,23 @@
-from flask import jsonify, Response  # type: ignore
+from flask import jsonify, Response, abort  # type: ignore
 import json
 from operator import itemgetter
 
-from service import app, amazon_s3_connector
+from service import app, amazon_s3_connector, logger_config
 
+import botocore.exceptions
+
+logger = logger_config.LoggerConfig(app)
+logger.setup_logger(__name__)
 
 @app.route('/list-files/<dataset>', methods=['GET'])
+@logger.start_stop_logging
 def get_available_files(dataset):
     prefix = '{}{}/'.format(app.config['AWS_FOLDER_PREFIX'], dataset)
-    file_list = amazon_s3_connector.get_file_list(prefix)
+    try:
+        file_list = amazon_s3_connector.get_file_list(prefix)
+    except botocore.exceptions.ClientError as e:
+        logger.log("An error occurred while retrieving file list.", level="ERROR", exception=e)
+        abort(404)
 
     new_list = []
     if 'Contents' in file_list:
