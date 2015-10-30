@@ -1,7 +1,7 @@
 #!/bin/sh
 export SETTINGS='dev'
 export PYTHONPATH=.
-export LOGGING_LEVEL='INFO'
+export LOGGING_LEVEL='INFO' # From DEBUG, INFO, WARNING, ERROR and CRITICAL
 export GENERAL_LOG_FILE='logs/data-publication-backend.log'
 export AWS_ACCESS_KEY=''
 export AWS_SECRET_KEY=''

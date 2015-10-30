@@ -17,7 +17,7 @@ def get_available_files(dataset):
         file_list = amazon_s3_connector.get_file_list(prefix)
     except botocore.exceptions.ClientError as e:
         logger.log("An error occurred while retrieving file list.", level="ERROR", exception=e)
-        abort(404)
+        file_list = {}
 
     new_list = []
     if 'Contents' in file_list:
