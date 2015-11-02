@@ -1,6 +1,6 @@
 from boto3.session import Session
 
-from service import app
+from service import app, logger_config
 
 AWS_ACCESS_KEY = app.config['AWS_ACCESS_KEY']
 AWS_SECRET_KEY = app.config['AWS_SECRET_KEY']
@@ -14,11 +14,16 @@ session = Session(aws_access_key_id=AWS_ACCESS_KEY,
 
 s3 = session.client('s3')
 
+logger = logger_config.LoggerConfig(app)
+logger.setup_logger(__name__)
 
+
+@logger.start_stop_logging
 def get_file_list(prefix):
     return s3.list_objects(Bucket=AWS_BUCKET_NAME, Prefix=prefix)
 
 
+@logger.start_stop_logging
 def get_download_url(key):
     parameters = {'Bucket': AWS_BUCKET_NAME, 'Key': key}
     return s3.generate_presigned_url('get_object', Params=parameters, ExpiresIn=AWS_LINK_DURATION)
