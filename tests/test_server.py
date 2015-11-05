@@ -169,6 +169,23 @@ class TestRetrieveFileDetails:
         assert response.status_code == 200
         assert len(file_details['File_List']) == 0
 
+    @mock.patch('service.amazon_s3_connector.get_file_list', return_value=one_file)
+    def test_health_check_ok(self, mock_list):
+        response = self.app.get('/health')
+        content = response.data.decode()
+        assert response.status_code == 200
+        assert json.loads(content)['status'] == "OK"
+
+    @mock.patch('service.amazon_s3_connector.get_file_list', return_value=one_file)
+    def test_health_check_exception(self, mock_list):
+        mock_list.side_effect = create_boto_client_error
+        response = self.app.get('/health')
+        content = response.data.decode()
+        content = response.data.decode()
+        assert response.status_code == 500
+        assert json.loads(content)['status'] == "Error"
+        assert json.loads(content)['error'] == "Error contacting Amazon S3 bucket"
+
 def create_boto_client_error(self, *args):
     error_response = {"Error": {"Code": 1, "Message": "Text"}}
     raise botocore.exceptions.ClientError(error_response=error_response, operation_name='')
