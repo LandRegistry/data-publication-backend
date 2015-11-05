@@ -45,9 +45,22 @@ def get_available_files(dataset):
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    return jsonify({"Status": "OK"})
+    try:
+        amazon_s3_connector.get_file_list('')
+        status = "OK"
+    except botocore.exceptions.ClientError:
+        status = "Error"
 
+    response_body = {'status': status}
 
-@app.route('/', methods=['GET'])
-def menu():
-    return jsonify({"Endpoints": ['/health', '/list-files/<dataset>']})
+    if status == "Error":
+        status_code = 500
+        response_body['error'] = 'Error contacting Amazon S3 bucket'
+    else:
+        status_code = 200
+
+    return Response(
+        json.dumps(response_body),
+        status=status_code,
+        mimetype='application/json',
+    )
