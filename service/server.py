@@ -46,7 +46,7 @@ def get_available_files(dataset):
 @app.route('/health', methods=['GET'])
 def health_check():
     try:
-        amazon_s3_connector.get_file_list('')
+        amazon_s3_connector.get_file_list(app.config['AWS_FOLDER_PREFIX'])
         status = "OK"
     except botocore.exceptions.ClientError:
         status = "Error"
